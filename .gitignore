@@ -17,3 +17,7 @@ TODO.txt
 
 # Ignore test file
 test.py
+
+main.py
+
+.DS_Store

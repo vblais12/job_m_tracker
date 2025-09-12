@@ -96,7 +96,7 @@ def top_skills_per_query(host=HOST, port=PORT, dbname=DBNAME, user=USER, passwor
 
 def main():
     #TODO: set new_jobs_only to TRUE when setting up ETL job
-    process_jobs(HOST, PORT, DBNAME, USER, PASSWORD, new_jobs_only=False)
+    process_jobs(HOST, PORT, DBNAME, USER, PASSWORD, new_jobs_only=True)
     top_skills = top_skills_per_query(top_n=50)
     for query, skills in top_skills.items():
         print(f"Top skills for {query}:")

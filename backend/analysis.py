@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import psycopg2
 from backend.process_skills import top_skills_per_query
+import json
 
 load_dotenv()
 
@@ -12,13 +13,18 @@ PORT = os.getenv("PORT")
 DBNAME = os.getenv("DBNAME")
 USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
+
+
 # TODO: Reformat for API calls
+# TODO: WHOLE ANALYSIS FILE NEEDS TO BE REFACTORED
 
   
 
 # This function returns a dataframe with the number of job postings as per a given frequency (daily vs weekly vs monthly, etc...)
 # Takes in a frequency argument, start and end date, and a group_by argument (default: search_query, to get job postings per role)
 # Returns DF
+
+#TODO: USE c.cursor() and row.fetchall() because pandas aint liking Postgres
 def job_volume_over_time(
         host=HOST,
         port=PORT, 
@@ -39,26 +45,27 @@ def job_volume_over_time(
     where = ["date_posted IS NOT NULL"]   # Make sure date not null and not an empty string
     
     if start_date:
-        where.append("date(date_posted) >= date(%s)")
+        where.append("date_posted >= date(%s)")
         params.append(start_date)
     if end_date:
-        where.append("date(date_posted) <= date(%s)")
+        where.append("date_posted <= date(%s)")
         params.append(end_date)
 
     count_expr = "COUNT(DISTINCT id)" if dedupe else "COUNT(*)"
 
     if group_by:
-        allowed_groups = os.getenv("ALLOWED_GROUPS")
+        allowed_groups = json.loads(os.getenv("ALLOWED_GROUPS", "[]"))
         if group_by not in allowed_groups:
             raise ValueError(f"Invalid group_by. Allowed: {allowed_groups}")
         sql = f"""
-        SELECT date(date_posted) AS d, {group_by} AS group_key, {count_expr} as job_count
+        SELECT date(date_posted) AS d, {group_by} AS group_key, {count_expr} AS job_count
         FROM job_listings
         WHERE {" AND ".join(where)}
         GROUP BY d, group_key
         ORDER BY d
         """
 
+        
         df = pd.read_sql(sql, conn, params=params)
         conn.close()
 
@@ -81,6 +88,7 @@ def job_volume_over_time(
         
         
         return result_df
+    
     
     else:
         print(f"Function called with no group_by param, exiting...")
@@ -105,7 +113,7 @@ def top_skills(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD
         query += "WHERE js.search_query LIKE %s"
         params = (f"{role}",)
     else:
-        prams = ()
+        params = ()
 
     # Group by skill, order by frequency and only get top k skills
     query += " GROUP BY js.skill ORDER BY freq DESC LIMIT %s"
@@ -128,9 +136,8 @@ def remote_vs_onsite(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PA
     query = """
         SELECT
             CASE
-                WHEN job_is_remote = '1' THEN 'Remote'
-                WHEN job_is_remote = '' THEN 'Onsite'
-                ELSE 'Unknown'
+                WHEN job_is_remote = 'true' THEN 'Remote'
+                ELSE 'Onsite'
             END as work_type,
             COUNT(*) as count
         FROM job_listings
@@ -191,6 +198,19 @@ def main():
     """
 
     print(top_skills_per_query(top_n=30))
+    print(f"Job volume over time: ")
+    df = job_volume_over_time(HOST, PORT, DBNAME, USER, PASSWORD, freq="D", start_date="2025-09-01", end_date="2025-09-11", group_by="search_query", dedupe=True)
+
+    DC = df.to_dict(orient="records")
+
+    print(f"Dataframe: {df}")
+
+    print(f"Dictionary: {DC}")
+
+    print(f"Remote vs onsite distribution: ")
+    df = remote_vs_onsite()
+    print(f"Dataframe: {df}")
+    print(f"DIctionary: {df.to_dict(orient="records")}")
 
 if  __name__ == "__main__":
     main()
