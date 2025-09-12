@@ -2,6 +2,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 import psycopg2
+from backend.process_skills import top_skills_per_query
 
 load_dotenv()
 
@@ -11,9 +12,9 @@ PORT = os.getenv("PORT")
 DBNAME = os.getenv("DBNAME")
 USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
+# TODO: Reformat for API calls
 
-
-
+  
 
 # This function returns a dataframe with the number of job postings as per a given frequency (daily vs weekly vs monthly, etc...)
 # Takes in a frequency argument, start and end date, and a group_by argument (default: search_query, to get job postings per role)
@@ -164,6 +165,7 @@ def geographic_distribution(host=HOST, port=PORT, dbname=DBNAME, user=USER, pass
 
 def main():
     # Job volume
+    """
     print(f"Job volume over time: ")
     df = job_volume_over_time(HOST, PORT, DBNAME, USER, PASSWORD, freq="D", start_date="2025-08-01", end_date="2025-08-28", group_by="search_query", dedupe=True)
     print(df)
@@ -186,6 +188,9 @@ def main():
     df = geographic_distribution()
     print("Distribution of location: ")
     print(df)
+    """
+
+    print(top_skills_per_query(top_n=30))
 
 if  __name__ == "__main__":
     main()
