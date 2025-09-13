@@ -137,7 +137,7 @@ def remote_vs_onsite(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PA
         SELECT
             CASE
                 WHEN job_is_remote = 'true' THEN 'Remote'
-                ELSE 'Onsite'
+                ELSE 'Onsite/Hybrid'
             END as work_type,
             COUNT(*) as count
         FROM job_listings
