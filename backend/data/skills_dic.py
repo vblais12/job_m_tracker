@@ -98,6 +98,12 @@ BACKEND_FRAMEWORKS = {
     "Spring Boot"
 }
 
+US_CITIES = ['San Francisco', 'New York', 'Seattle', 'Los Angeles', 'Washington DC', 'Dallas', 'Boston', 'Chicago', 'Austin', 'Denver']
+
+CA_CITIES = ['Toronto', 'Montreal', 'Vancouver', 'Ottawa', 'Calgary', 'Edmonton', 'Waterloo', 'Quebec', 'Winnipeg', 'Halifax']
+
+
+
 
 # TODO: list of soft skills??
 # TODO: create dics of skills for specific categories (programming languages, front-end frameworks, dev-ops, etc)
