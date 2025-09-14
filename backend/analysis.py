@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import psycopg2
 from backend.process_skills import top_skills_per_query
+from backend.data.skills_dic import US_STATES, CA_PROV_TERR
 import json
 
 load_dotenv()
@@ -152,7 +153,7 @@ def remote_vs_onsite(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PA
 
 
 # Analyze and visualize the geographic distribution of jobs
-def geographic_distribution(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD, visualize=False):
+def geographic_distribution(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD, location=None):
 
     conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
     
@@ -165,11 +166,20 @@ def geographic_distribution(host=HOST, port=PORT, dbname=DBNAME, user=USER, pass
     """
     
     df = pd.read_sql(query, conn)
+
+    if location == "US":
+        states = US_STATES
+        df = df[df["job_state"].isin(states)]
+    elif location == "CA":
+        prov_terr = CA_PROV_TERR
+        df = df[df["job_state"].isin(prov_terr)]
+
+
     conn.close()
     
-
     return df
 
+# MAIN
 def main():
     # Job volume
     """
