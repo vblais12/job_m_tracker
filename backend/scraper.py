@@ -62,17 +62,17 @@ def generate_job_key(title, employer, city, description):
 # API call, fetches jobs and returns json dictionary of jobs
 # TODO: Maybe had some location features
 #
-def fetch_jobs(query="Machine Learning", location='', pages=9, date_posted="today"):
+def fetch_jobs(query="Machine Learning", location="US", pages=9, date_posted="today"):
 
     url = 'https://jsearch.p.rapidapi.com/search'
 
-    search_query = f"{query} {location}".strip()
+    search_query = f"{query}".strip()
 
     params = {
         "query" : search_query,
         "page" : "1",
         "num_pages" : str(pages),
-        "country" : "us",
+        "country" : {location},
         "date_posted" : date_posted,
     }
 
@@ -154,24 +154,45 @@ def store_jobs(jobs, host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PA
 
 
 # Counts how many jobs are in the DB (TOTAL and per role)
-def job_counts(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD):
+def job_counts(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD, location=None):
     
     conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
 
     with conn.cursor() as c:
 
         # Total jobs
-        c.execute("SELECT COUNT(*) FROM job_listings")
-        total_jobs = c.fetchone()[0]
 
-        # Jobs grouped by search_query
-        c.execute("""
-            SELECT search_query, COUNT(*) as count
-            FROM job_listings
-            GROUP BY search_query
-            ORDER BY count DESC
-        """)
-        counts_by_query = c.fetchall()
+        if location:
+            c.execute("""
+                SELECT COUNT(*) FROM job_listings
+                WHERE LOWER(job_country) = LOWER(%s)
+            """, (location,))
+            total_jobs = c.fetchone()[0]
+
+             # Jobs grouped by search_query
+            c.execute("""
+                SELECT search_query, COUNT(*) as count
+                FROM job_listings
+                WHERE LOWER(job_country) = LOWER(%s)
+                GROUP BY search_query
+                ORDER BY count DESC
+            """, (location,))
+
+            counts_by_query = c.fetchall()
+
+
+        else:
+            c.execute("SELECT COUNT(*) FROM job_listings")
+            total_jobs = c.fetchone()[0]
+
+            # Jobs grouped by search_query
+            c.execute("""
+                SELECT search_query, COUNT(*) as count
+                FROM job_listings
+                GROUP BY search_query
+                ORDER BY count DESC
+            """)
+            counts_by_query = c.fetchall()
 
     
     conn.close()
@@ -193,7 +214,7 @@ def main():
 
     for role in roles:
         try:
-            jobs = fetch_jobs(query=role, pages=30, date_posted="today")
+            jobs = fetch_jobs(query=role, location="US", pages=30, date_posted="today")
             all_jobs.extend(jobs)
         except Exception as e:
             print(f"Error while fetching job for {role}: {e}")
