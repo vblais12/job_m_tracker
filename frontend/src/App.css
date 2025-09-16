@@ -1,0 +1,40 @@
+/* Global styles with comfortable margins */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #f8f9fa;
+}
+
+#root {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Dashboard container with nice margins and rounded corners */
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+  overflow: hidden;
+}
+
+/* Content padding for better spacing */
+.container-fluid {
+  padding: 20px;
+}
+
+/* Navigation styling */
+.navbar {
+  border-radius: 12px 12px 0 0;
+  margin: 0;
+}
+
+/* Tab navigation styling */
+.nav-tabs {
+  border-bottom: 1px solid #dee2e6;
+  margin: 0 20px;
+  border-radius: 0;
+}

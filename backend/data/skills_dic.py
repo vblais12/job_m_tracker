@@ -114,7 +114,6 @@ US_STATES = [
 ]
 
 
-
 CA_PROV_TERR = [
     "Alberta", "British Columbia", "Manitoba", "New Brunswick",
     "Newfoundland and Labrador", "Nova Scotia", "Ontario",
@@ -127,13 +126,6 @@ CA_PROV_TERR = [
 CA_CITIES = ['Toronto', 'Montreal', 'Vancouver', 'Ottawa', 'Calgary', 'Edmonton', 'Waterloo', 'Quebec', 'Winnipeg', 'Halifax']
 
 
-
-
-# TODO: list of soft skills??
-# TODO: create dics of skills for specific categories (programming languages, front-end frameworks, dev-ops, etc)
-# could be useful for advanced features
-# TODO: set up cron job/windows process for auto scraping + extracting
-# TODO: could probably start building the dashboards + interactive interface
 
 # List of most possibly demanded skills (includes programming languages, web dev, databases, cybersecurity, AI/ML, game dev, OS, IDE's, etc)
 # HARDSKILLS

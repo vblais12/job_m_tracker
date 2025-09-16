@@ -40,7 +40,7 @@ def create_salary_table(host=HOST, port=PORT, dbname=DBNAME, user=USER, password
     conn.close()
 
 
-# TODO: FINISH THIS
+# Get salary data for top 10 cities
 def fetch_salary(country: str, role: str, host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD):
     
     conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
@@ -132,17 +132,6 @@ def query_salaries(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASS
 # MAIN
 def main():
 
-    """
-    create_salary_table()
-    country = "CA"
-
-    roles = ['Machine Learning engineer', 'Software engineer']
-
-    for role in roles:
-        msg = fetch_salary(country=country, role=role) 
-    
-    
-    """
     df = query_salaries(location=None)
 
     print(df)

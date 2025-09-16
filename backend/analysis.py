@@ -16,10 +16,6 @@ USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
 
 
-# TODO: Reformat for API calls
-# TODO: WHOLE ANALYSIS FILE NEEDS TO BE REFACTORED
-
-  
 
 # This function returns a dataframe with the number of job postings as per a given frequency (daily vs weekly vs monthly, etc...)
 # Takes in a frequency argument, start and end date, and a group_by argument (default: search_query, to get job postings per role)
@@ -70,17 +66,12 @@ def job_volume_over_time(
         df = pd.read_sql(sql, conn, params=params)
         conn.close()
 
-        ## print(f"This is the dataframe before any operations (right after running SQL): ")
-        ## print(df)
-
         if df.empty:
             return pd.DataFrame(columns=["date", "job_count"])
 
         # Organize into 
         df["d"] = pd.to_datetime(df["d"])
         pivot = df.pivot(index="d", columns="group_key", values="job_count").fillna(0)
-        # print(f"This is the DF right after unningf pivot function: ")
-        # print(pivot)
 
         if freq != "D":
             pivot = pivot.resample(freq).sum()
@@ -111,8 +102,8 @@ def top_skills(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD
 
     # if role parameter set, match with role and add to param 
     if role:
-        query += "WHERE js.search_query LIKE %s"
-        params = (f"{role}",)
+        query += " WHERE js.search_query ILIKE %s"
+        params = (f"%{role}%",)
     else:
         params = ()
 
@@ -182,45 +173,7 @@ def geographic_distribution(host=HOST, port=PORT, dbname=DBNAME, user=USER, pass
 # MAIN
 def main():
     # Job volume
-    """
-    print(f"Job volume over time: ")
-    df = job_volume_over_time(HOST, PORT, DBNAME, USER, PASSWORD, freq="D", start_date="2025-08-01", end_date="2025-08-28", group_by="search_query", dedupe=True)
-    print(df)
-
-    # Top skills
-    print(f"Top skills per role: ")
-    roles = ["Machine Learning engineer", "Software Engineer"]
-
-    for role in roles:
-        df = top_skills(HOST, PORT, DBNAME, USER, PASSWORD, role, top_k=50)
-        print(f"For  {role}: ")
-        print(df)
-
-    # On-site vs Remote
-    df = remote_vs_onsite(HOST, PORT, DBNAME, USER, PASSWORD)
-    print("Distribution of On-site vs Remote jobs: ")
-    print(df)
-
-
-    df = geographic_distribution()
-    print("Distribution of location: ")
-    print(df)
-    """
-
-    print(top_skills_per_query(top_n=30))
-    print(f"Job volume over time: ")
-    df = job_volume_over_time(HOST, PORT, DBNAME, USER, PASSWORD, freq="D", start_date="2025-09-01", end_date="2025-09-11", group_by="search_query", dedupe=True)
-
-    DC = df.to_dict(orient="records")
-
-    print(f"Dataframe: {df}")
-
-    print(f"Dictionary: {DC}")
-
-    print(f"Remote vs onsite distribution: ")
-    df = remote_vs_onsite()
-    print(f"Dataframe: {df}")
-    print(f"DIctionary: {df.to_dict(orient="records")}")
+    pass
 
 if  __name__ == "__main__":
     main()

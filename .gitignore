@@ -1,6 +1,10 @@
 # Ignore virtual environment
 venv/
 
+# Ignore Node.js dependencies
+node_modules/
+frontend/node_modules/
+
 # Ignore Python cache and compiled files
 __pycache__/
 *.pyc
@@ -17,7 +21,5 @@ TODO.txt
 
 # Ignore test file
 test.py
-
-main.py
 
 .DS_Store

@@ -14,9 +14,7 @@ USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
 
 
-
 # Function to process job postings in DB, extract skills and store into job_skills table
-# TODO: check and fix all the queries 
 def process_jobs(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWORD, new_jobs_only=True):
 
     DB_migration(host, port, dbname, user, password)
