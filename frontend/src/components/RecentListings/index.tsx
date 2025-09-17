@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecentListings } from '../../hooks/useApi';
 import { LoadingSpinner, ErrorAlert, ChartContainer } from '../common';
 
@@ -8,6 +8,7 @@ interface RecentListingsProps {
 
 export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
   const { data, loading, error, refetch } = useRecentListings(location);
+  const [showAllJobs, setShowAllJobs] = useState(false);
 
   if (loading) {
     return <LoadingSpinner text="Loading recent job listings..." />;
@@ -85,7 +86,7 @@ export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
       {/* Jobs by Role */}
       <div className="col-lg-4">
         <ChartContainer title="Recent Jobs by Role">
-          <div className="list-group list-group-flush">
+          <div>
             {roleStats.map((roleData, index) => {
               const colors = ['primary', 'success', 'info', 'warning', 'danger'];
               const colorClass = colors[index % colors.length];
@@ -93,13 +94,22 @@ export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
               return (
                 <div 
                   key={roleData.role}
-                  className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0"
+                  className="d-flex justify-content-between align-items-center px-0 py-3"
+                  style={{
+                    backgroundColor: 'transparent',
+                    borderBottom: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)'
+                  }}
                 >
                   <div className="d-flex align-items-center">
                     <span className={`badge bg-${colorClass} me-3`}>{index + 1}</span>
                     <div>
-                      <div className="fw-medium">{roleData.role}</div>
-                      <small className="text-muted">Category</small>
+                      <div className="fw-medium" style={{ color: 'var(--text-primary)' }}>
+                        {roleData.role}
+                      </div>
+                      <small style={{ color: 'var(--text-muted)' }}>
+                        Category
+                      </small>
                     </div>
                   </div>
                   <span className={`badge bg-${colorClass} rounded-pill fs-6`}>
@@ -116,7 +126,7 @@ export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
       <div className="col-lg-8">
         <ChartContainer title={`Latest Job Postings ${location ? `in ${location}` : ''}`}>
           <div className="row g-3">
-            {data.slice(0, 12).map((job, index) => (
+            {(showAllJobs ? data : data.slice(0, 12)).map((job, index) => (
               <div key={`${job.job_title}-${job.employer_name}-${index}`} className="col-md-6">
                 <div className="card h-100 border-0 shadow-sm">
                   <div className="card-body">
@@ -161,10 +171,39 @@ export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
           
           {data.length > 12 && (
             <div className="text-center mt-4">
-              <div className="alert alert-info">
-                <i className="fas fa-info-circle me-2"></i>
-                Showing 12 of {data.length} recent job listings
-              </div>
+              <button
+                className="btn btn-outline-primary btn-lg"
+                onClick={() => setShowAllJobs(!showAllJobs)}
+                style={{
+                  background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
+                  borderColor: 'var(--accent-primary)',
+                  color: 'white',
+                  transition: 'all 0.3s ease',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                <i className={`fas fa-chevron-${showAllJobs ? 'up' : 'down'} me-2`}></i>
+                {showAllJobs 
+                  ? `Show Less (12 of ${data.length})` 
+                  : `Show All ${data.length} Jobs`
+                }
+              </button>
+              
+              {!showAllJobs && (
+                <div className="alert alert-info mt-3 mb-0">
+                  <i className="fas fa-info-circle me-2"></i>
+                  Showing 12 of {data.length} recent job listings
+                </div>
+              )}
             </div>
           )}
         </ChartContainer>
@@ -200,55 +239,80 @@ export const RecentListings: React.FC<RecentListingsProps> = ({ location }) => {
               .slice(0, 10);
 
             return (
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Rank</th>
-                      <th>Company</th>
-                      <th className="text-center">Job Count</th>
-                      <th className="text-center">Role Types</th>
-                      <th>Sample Positions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {topCompanies.map((company, index) => (
-                      <tr key={company.company}>
-                        <td>
-                          <span className="badge bg-primary">#{index + 1}</span>
-                        </td>
-                        <td className="fw-bold">{company.company}</td>
-                        <td className="text-center">
-                          <span className="badge bg-success">{company.count}</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="badge bg-info">{company.roleCount}</span>
-                        </td>
-                        <td>
-                          <div className="d-flex flex-wrap gap-1">
-                            {company.jobs.slice(0, 2).map((job, jobIndex) => (
-                              <small 
-                                key={jobIndex} 
-                                className="badge bg-light text-dark"
-                                title={job.job_title}
-                              >
-                                {job.job_title.length > 20 
-                                  ? job.job_title.substring(0, 20) + '...' 
-                                  : job.job_title
-                                }
-                              </small>
-                            ))}
-                            {company.jobs.length > 2 && (
-                              <small className="text-muted">
-                                +{company.jobs.length - 2} more
-                              </small>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div>
+                {/* Header */}
+                <div 
+                  className="d-flex align-items-center px-0 py-2 mb-2"
+                  style={{
+                    borderBottom: '2px solid var(--border-color)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    width: '100%'
+                  }}
+                >
+                  <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                    Rank
+                  </span>
+                  <span style={{ flex: 2, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                    Company
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                    Job Count
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                    Role Types
+                  </span>
+                  <span style={{ flex: 2, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                    Sample Positions
+                  </span>
+                </div>
+
+                {/* Data Rows */}
+                {topCompanies.map((company, index) => (
+                  <div 
+                    key={company.company}
+                    className="d-flex align-items-center px-0 py-3"
+                    style={{
+                      backgroundColor: 'transparent',
+                      borderBottom: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)',
+                      width: '100%'
+                    }}
+                  >
+                    <span style={{ flex: 1, textAlign: 'center' }}>
+                      <span className="badge bg-primary">#{index + 1}</span>
+                    </span>
+                    <span className="fw-bold" style={{ flex: 2, color: 'var(--text-primary)', textAlign: 'center' }}>
+                      {company.company}
+                    </span>
+                    <span style={{ flex: 1, textAlign: 'center' }}>
+                      <span className="badge bg-success">{company.count}</span>
+                    </span>
+                    <span style={{ flex: 1, textAlign: 'center' }}>
+                      <span className="badge bg-info">{company.roleCount}</span>
+                    </span>
+                    <span style={{ flex: 2, textAlign: 'center' }}>
+                      <div className="d-flex flex-wrap gap-1 justify-content-center">
+                        {company.jobs.slice(0, 2).map((job, jobIndex) => (
+                          <small 
+                            key={jobIndex} 
+                            className="badge bg-light text-dark"
+                            title={job.job_title}
+                          >
+                            {job.job_title.length > 15 
+                              ? job.job_title.substring(0, 15) + '...' 
+                              : job.job_title
+                            }
+                          </small>
+                        ))}
+                        {company.jobs.length > 2 && (
+                          <small style={{ color: 'var(--text-muted)' }}>
+                            +{company.jobs.length - 2} more
+                          </small>
+                        )}
+                      </div>
+                    </span>
+                  </div>
+                ))}
               </div>
             );
           })()}

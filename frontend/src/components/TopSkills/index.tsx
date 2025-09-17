@@ -104,6 +104,33 @@ export const TopSkills: React.FC<TopSkillsProps> = ({ availableRoles = [] }) => 
 
   return (
     <div className="row g-4">
+      {/* Location Data Notice */}
+      <div className="col-12">
+        <div 
+          className="alert alert-info border-0"
+          style={{
+            background: 'linear-gradient(135deg, rgba(13, 202, 240, 0.1), rgba(13, 110, 253, 0.1))',
+            border: '1px solid rgba(13, 202, 240, 0.3)',
+            borderRadius: '8px'
+          }}
+        >
+          <div className="d-flex align-items-center">
+            <i className="fas fa-globe-americas fa-lg me-3" style={{ color: 'var(--bs-info)' }}></i>
+            <div>
+              <h6 className="alert-heading mb-1" style={{ color: 'var(--bs-info)' }}>
+                <strong>Multi-Region Data</strong>
+              </h6>
+              <p className="mb-0">
+                <small>
+                  Skills data is aggregated from job postings across <strong>United States</strong> and <strong>Canada</strong> markets. 
+                  This provides comprehensive insights into skill demands across North American tech industry.
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Skills Chart */}
       <div className="col-12">
         <ChartContainer 

@@ -197,7 +197,7 @@ export const SalaryAnalysis: React.FC<SalaryAnalysisProps> = ({ location }) => {
               .slice(0, 8);
 
             return (
-              <div className="list-group list-group-flush">
+              <div>
                 {topCities.map((cityData, index) => {
                   const colors = ['primary', 'success', 'info', 'warning'];
                   const colorClass = colors[index % colors.length];
@@ -205,18 +205,31 @@ export const SalaryAnalysis: React.FC<SalaryAnalysisProps> = ({ location }) => {
                   return (
                     <div 
                       key={cityData.city}
-                      className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0"
+                      className="d-flex justify-content-between align-items-center px-0 py-3"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderBottom: '1px solid var(--border-color)',
+                        color: 'var(--text-primary)'
+                      }}
                     >
                       <div className="d-flex align-items-center">
                         <span className={`badge bg-${colorClass} me-3`}>#{index + 1}</span>
                         <div>
-                          <div className="fw-medium">{cityData.city}</div>
-                          <small className="text-muted">{cityData.roleCount} roles</small>
+                          <div className="fw-medium" style={{ color: 'var(--text-primary)' }}>
+                            {cityData.city}
+                          </div>
+                          <small style={{ color: 'var(--text-muted)' }}>
+                            {cityData.roleCount} roles
+                          </small>
                         </div>
                       </div>
                       <div className="text-end">
-                        <div className="fw-bold">{formatSalary(cityData.highestMedian)}</div>
-                        <small className="text-muted">top median</small>
+                        <div className="fw-bold" style={{ color: 'var(--text-primary)' }}>
+                          {formatSalary(cityData.highestMedian)}
+                        </div>
+                        <small style={{ color: 'var(--text-muted)' }}>
+                          top median
+                        </small>
                       </div>
                     </div>
                   );
@@ -230,36 +243,71 @@ export const SalaryAnalysis: React.FC<SalaryAnalysisProps> = ({ location }) => {
       {/* Detailed Salary Table */}
       <div className="col-12">
         <ChartContainer title="Detailed Salary Breakdown">
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead className="table-light">
-                <tr>
-                  <th>City</th>
-                  <th>Role</th>
-                  <th className="text-end">Min Salary</th>
-                  <th className="text-end">Median Salary</th>
-                  <th className="text-end">Min Base</th>
-                  <th className="text-end">Median Base</th>
-                </tr>
-              </thead>
-              <tbody>
-                {validSalaries
-                  .sort((a, b) => b.median_salary - a.median_salary)
-                  .slice(0, 20)
-                  .map((item, index) => (
-                    <tr key={`${item.city}-${item.role}-${index}`}>
-                      <td className="fw-medium">{item.city}</td>
-                      <td>{item.role}</td>
-                      <td className="text-end">{formatSalary(item.min_salary || 0)}</td>
-                      <td className="text-end fw-bold text-primary">
-                        {formatSalary(item.median_salary)}
-                      </td>
-                      <td className="text-end">{formatSalary(item.min_base_salary || 0)}</td>
-                      <td className="text-end">{formatSalary(item.median_base_salary || 0)}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          <div>
+            {/* Header */}
+            <div 
+              className="d-flex align-items-center px-0 py-2 mb-2"
+              style={{
+                borderBottom: '2px solid var(--border-color)',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                width: '100%'
+              }}
+            >
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                City
+              </span>
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                Role
+              </span>
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                Min Salary
+              </span>
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                Median Salary
+              </span>
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                Min Base
+              </span>
+              <span style={{ flex: 1, color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem', textAlign: 'center' }}>
+                Median Base
+              </span>
+            </div>
+
+            {/* Data Rows */}
+            {validSalaries
+              .sort((a, b) => b.median_salary - a.median_salary)
+              .slice(0, 20)
+              .map((item, index) => (
+                <div 
+                  key={`${item.city}-${item.role}-${index}`}
+                  className="d-flex align-items-center px-0 py-3"
+                  style={{
+                    backgroundColor: 'transparent',
+                    borderBottom: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)',
+                    width: '100%'
+                  }}
+                >
+                  <span className="fw-medium" style={{ flex: 1, color: 'var(--text-primary)', textAlign: 'center' }}>
+                    {item.city}
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-secondary)', textAlign: 'center' }}>
+                    {item.role}
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-secondary)', textAlign: 'center' }}>
+                    {formatSalary(item.min_salary || 0)}
+                  </span>
+                  <span className="fw-bold" style={{ flex: 1, color: 'var(--accent-primary)', textAlign: 'center' }}>
+                    {formatSalary(item.median_salary)}
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-secondary)', textAlign: 'center' }}>
+                    {formatSalary(item.min_base_salary || 0)}
+                  </span>
+                  <span style={{ flex: 1, color: 'var(--text-secondary)', textAlign: 'center' }}>
+                    {formatSalary(item.median_base_salary || 0)}
+                  </span>
+                </div>
+              ))}
           </div>
           {validSalaries.length > 20 && (
             <div className="text-center mt-3">

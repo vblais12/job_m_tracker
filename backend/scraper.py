@@ -214,7 +214,7 @@ def main():
 
     for role in roles:
         try:
-            jobs = fetch_jobs(query=role, location="CA", pages=30, date_posted="3days")
+            jobs = fetch_jobs(query=role, location="ca", pages=30, date_posted="today")
             all_jobs.extend(jobs)
         except Exception as e:
             print(f"Error while fetching job for {role}: {e}")

@@ -1,26 +1,17 @@
 import React from 'react';
+import '../ChartContainer/ChartContainer.css';
 
 interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
   text?: string;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'md', 
   text = 'Loading...' 
 }) => {
-  const spinnerSize = {
-    sm: 'spinner-border-sm',
-    md: '',
-    lg: ''
-  };
-
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center py-4">
-      <div className={`spinner-border text-primary ${spinnerSize[size]}`} role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-      {text && <div className="mt-2 text-muted">{text}</div>}
+    <div className="loading-container">
+      <div className="loading-spinner"></div>
+      {text && <div className="loading-text">{text}</div>}
     </div>
   );
 };
@@ -33,20 +24,23 @@ interface ErrorAlertProps {
 
 export const ErrorAlert: React.FC<ErrorAlertProps> = ({ 
   message, 
-  onRetry, 
-  variant = 'danger' 
+  onRetry
 }) => {
   return (
-    <div className={`alert alert-${variant} d-flex align-items-center`} role="alert">
-      <div className="flex-grow-1">
-        <strong>Error:</strong> {message}
+    <div className="error-container">
+      <div className="error-icon">
+        <i className="fas fa-exclamation-triangle"></i>
+      </div>
+      <div className="error-message">
+        {message}
       </div>
       {onRetry && (
         <button 
-          className="btn btn-outline-danger btn-sm ms-3"
+          className="btn btn-outline-primary btn-sm mt-3"
           onClick={onRetry}
         >
-          Retry
+          <i className="fas fa-redo me-2"></i>
+          Try Again
         </button>
       )}
     </div>
@@ -65,26 +59,25 @@ export const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
   subtitle,
-  icon,
-  colorClass = 'primary'
+  icon
 }) => {
   return (
-    <div className="card h-100 shadow-sm">
-      <div className="card-body">
-        <div className="d-flex align-items-center">
-          <div className="flex-grow-1">
-            <h6 className="card-subtitle mb-2 text-muted">{title}</h6>
-            <h3 className={`card-title mb-1 text-${colorClass}`}>{value}</h3>
-            {subtitle && (
-              <small className="text-muted">{subtitle}</small>
-            )}
-          </div>
-          {icon && (
-            <div className={`ms-3 text-${colorClass}`}>
-              <i className={`${icon} fa-2x`}></i>
+    <div className="stat-card">
+      <div className="d-flex align-items-center">
+        <div className="flex-grow-1">
+          <div className="stat-label">{title}</div>
+          <div className="stat-value">{value}</div>
+          {subtitle && (
+            <div className="stat-label" style={{ fontSize: '0.8rem', marginTop: '4px' }}>
+              {subtitle}
             </div>
           )}
         </div>
+        {icon && (
+          <div className="ms-3" style={{ color: 'var(--accent-primary)', fontSize: '2rem' }}>
+            <i className={icon}></i>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -102,14 +95,14 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   actions
 }) => {
   return (
-    <div className="card shadow-sm">
-      <div className="card-header bg-white">
+    <div className="chart-container">
+      <div className="chart-header">
         <div className="d-flex justify-content-between align-items-center">
-          <h5 className="card-title mb-0">{title}</h5>
+          <h5 className="mb-0">{title}</h5>
           {actions && <div className="ms-auto">{actions}</div>}
         </div>
       </div>
-      <div className="card-body">
+      <div className="chart-body">
         {children}
       </div>
     </div>

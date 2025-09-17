@@ -140,15 +140,22 @@ export const RemoteVsOnsite: React.FC = () => {
               return (
                 <div 
                   key={item.work_type} 
-                  className="list-group-item d-flex align-items-center px-0 py-3 border-0"
+                  className="d-flex align-items-center px-0 py-3"
+                  style={{
+                    backgroundColor: 'transparent',
+                    borderBottom: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)'
+                  }}
                 >
                   <div className={`me-3 text-${colorClass}`}>
                     <i className={`${icon} fa-lg`}></i>
                   </div>
                   <div className="flex-grow-1">
-                    <h6 className="mb-1">{item.work_type}</h6>
+                    <h6 className="mb-1" style={{ color: 'var(--text-primary)' }}>
+                      {item.work_type}
+                    </h6>
                     <div className="d-flex justify-content-between align-items-center">
-                      <small className="text-muted">
+                      <small style={{ color: 'var(--text-muted)' }}>
                         {item.percentage.toFixed(1)}% of all positions
                       </small>
                       <span className={`badge bg-${colorClass} rounded-pill`}>
@@ -162,9 +169,12 @@ export const RemoteVsOnsite: React.FC = () => {
           </div>
           
           {totalJobs > 0 && (
-            <div className="mt-3 pt-3 border-top">
+            <div 
+              className="mt-3 pt-3"
+              style={{ borderTop: '1px solid var(--border-color)' }}
+            >
               <div className="text-center">
-                <small className="text-muted">
+                <small style={{ color: 'var(--text-muted)' }}>
                   Remote work represents{' '}
                   <strong className="text-success">
                     {((remoteData?.count || 0) / totalJobs * 100).toFixed(1)}%

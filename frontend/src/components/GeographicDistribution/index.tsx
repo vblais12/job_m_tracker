@@ -46,11 +46,17 @@ export const GeographicDistribution: React.FC<GeographicDistributionProps> = ({ 
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <div className="d-flex align-items-center">
                         <span className={`badge bg-${colorClass} me-2`}>#{index + 1}</span>
-                        <span className="fw-bold">{item.job_state}</span>
+                        <span className="fw-bold" style={{ color: 'var(--text-primary)' }}>
+                          {item.job_state}
+                        </span>
                       </div>
                       <div className="text-end">
-                        <div className="fw-bold">{item.job_count.toLocaleString()}</div>
-                        <small className="text-muted">{percentage.toFixed(1)}%</small>
+                        <div className="fw-bold" style={{ color: 'var(--text-primary)' }}>
+                          {item.job_count.toLocaleString()}
+                        </div>
+                        <small style={{ color: 'var(--text-muted)' }}>
+                          {percentage.toFixed(1)}%
+                        </small>
                       </div>
                     </div>
                     <div className="progress" style={{ height: '25px' }}>
@@ -119,7 +125,7 @@ export const GeographicDistribution: React.FC<GeographicDistributionProps> = ({ 
         {/* Top 5 Quick Stats */}
         <div className="mt-4">
           <ChartContainer title="Top 5 Locations">
-            <div className="list-group list-group-flush">
+            <div>
               {topStates.slice(0, 5).map((item, index) => {
                 const percentage = totalJobs > 0 ? ((item.job_count / totalJobs) * 100) : 0;
                 const colors = ['primary', 'success', 'info', 'warning', 'danger'];
@@ -128,13 +134,22 @@ export const GeographicDistribution: React.FC<GeographicDistributionProps> = ({ 
                 return (
                   <div 
                     key={item.job_state}
-                    className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0"
+                    className="d-flex justify-content-between align-items-center px-0 py-3"
+                    style={{
+                      backgroundColor: 'transparent',
+                      borderBottom: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)'
+                    }}
                   >
                     <div className="d-flex align-items-center">
                       <span className={`badge bg-${colorClass} me-3`}>#{index + 1}</span>
                       <div>
-                        <div className="fw-medium">{item.job_state}</div>
-                        <small className="text-muted">{percentage.toFixed(1)}% of total</small>
+                        <div className="fw-medium" style={{ color: 'var(--text-primary)' }}>
+                          {item.job_state}
+                        </div>
+                        <small style={{ color: 'var(--text-muted)' }}>
+                          {percentage.toFixed(1)}% of total
+                        </small>
                       </div>
                     </div>
                     <span className={`badge bg-${colorClass} rounded-pill fs-6`}>
@@ -152,32 +167,58 @@ export const GeographicDistribution: React.FC<GeographicDistributionProps> = ({ 
       {data.length > 10 && (
         <div className="col-12">
           <ChartContainer title={`All ${location === 'CA' ? 'Provinces/Territories' : 'States'} (${data.length} total)`}>
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead className="table-light">
-                  <tr>
-                    <th>Rank</th>
-                    <th>{location === 'CA' ? 'Province/Territory' : 'State'}</th>
-                    <th className="text-end">Job Count</th>
-                    <th className="text-end">Percentage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item, index) => {
-                    const percentage = totalJobs > 0 ? ((item.job_count / totalJobs) * 100) : 0;
-                    return (
-                      <tr key={item.job_state}>
-                        <td>
-                          <span className="badge bg-secondary">#{index + 1}</span>
-                        </td>
-                        <td className="fw-medium">{item.job_state}</td>
-                        <td className="text-end">{item.job_count.toLocaleString()}</td>
-                        <td className="text-end">{percentage.toFixed(1)}%</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div>
+              {/* Header */}
+              <div 
+                className="d-flex justify-content-between align-items-center px-0 py-2 mb-2"
+                style={{
+                  borderBottom: '2px solid var(--border-color)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                }}
+              >
+                <div className="d-flex align-items-center">
+                  <span className="me-3" style={{ width: '50px', color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem' }}>
+                    Rank
+                  </span>
+                  <div style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem' }}>
+                    {location === 'CA' ? 'Province/Territory' : 'State'}
+                  </div>
+                </div>
+                <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.9rem' }}>
+                  Job Count
+                </span>
+              </div>
+
+              {/* Data Rows */}
+              {data.map((item, index) => {
+                const percentage = totalJobs > 0 ? ((item.job_count / totalJobs) * 100) : 0;
+                return (
+                  <div 
+                    key={item.job_state}
+                    className="d-flex justify-content-between align-items-center px-0 py-3"
+                    style={{
+                      backgroundColor: 'transparent',
+                      borderBottom: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <div className="d-flex align-items-center">
+                      <span className="badge bg-secondary me-3">#{index + 1}</span>
+                      <div>
+                        <div className="fw-medium" style={{ color: 'var(--text-primary)' }}>
+                          {item.job_state}
+                        </div>
+                        <small style={{ color: 'var(--text-muted)' }}>
+                          {percentage.toFixed(1)}% of total
+                        </small>
+                      </div>
+                    </div>
+                    <span className="badge bg-primary rounded-pill fs-6">
+                      {item.job_count.toLocaleString()}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </ChartContainer>
         </div>
