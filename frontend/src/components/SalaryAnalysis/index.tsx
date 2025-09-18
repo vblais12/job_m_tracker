@@ -38,7 +38,6 @@ export const SalaryAnalysis: React.FC<SalaryAnalysisProps> = ({ location }) => {
   // Key salary insights
   const medianSalaries = validSalaries.map(item => item.median_salary);
   const minSalaries = validSalaries.map(item => item.min_salary).filter(sal => sal && sal > 0);
-  const medianBaseSalaries = validSalaries.map(item => item.median_base_salary).filter(sal => sal && sal > 0);
   
   const medianSalaryAverage = medianSalaries.reduce((sum, sal) => sum + sal, 0) / medianSalaries.length;
   const lowestMinSalary = minSalaries.length > 0 ? Math.min(...minSalaries) : Math.min(...medianSalaries);
