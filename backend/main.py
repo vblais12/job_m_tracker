@@ -16,7 +16,9 @@ origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
-    "https://job-m-tracker.onrender.com"
+    "https://job-m-tracker.onrender.com",
+    "https://job-m-tracker.vercel.app",
+    "https://*.vercel.app"  # Allow all Vercel preview deployments
 ]
 
 app.add_middleware(
