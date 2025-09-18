@@ -61,6 +61,33 @@ export const RemoteVsOnsite: React.FC = () => {
         </div>
       </div>
 
+      {/* Multi-Region Data Notice */}
+      <div className="col-12">
+        <div 
+          className="alert d-flex align-items-center"
+          style={{ 
+            backgroundColor: 'var(--info-bg)',
+            border: '1px solid var(--info-border)',
+            borderRadius: '8px'
+          }}
+        >
+          <div className="d-flex align-items-center">
+            <i className="fas fa-globe-americas fa-lg me-3" style={{ color: 'var(--bs-info)' }}></i>
+            <div>
+              <h6 className="alert-heading mb-1" style={{ color: 'var(--bs-info)' }}>
+                <strong>Multi-Region Data</strong>
+              </h6>
+              <p className="mb-0">
+                <small>
+                  Work arrangement data is aggregated from job postings across <strong>United States</strong> and <strong>Canada</strong> markets. 
+                  This provides comprehensive insights into remote vs on-site opportunities across North American tech industry.
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Visual Chart */}
       <div className="col-md-8">
         <ChartContainer title="Work Arrangement Distribution">
