@@ -56,7 +56,7 @@ export const JobCounts: React.FC<JobCountsProps> = ({ location }) => {
             <StatCard
               title="Total Job Listings"
               value={totalJobs.toLocaleString()}
-              subtitle={`Available in ${location}`}
+              subtitle={`Available in ${location} since 2025-09-01`}
               icon="fas fa-briefcase"
               colorClass="primary"
             />
