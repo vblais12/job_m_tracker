@@ -28,6 +28,34 @@ export const RemoteVsOnsite: React.FC = () => {
 
   return (
     <div className="row g-4">
+      {/* Multi-Region Data Notice */}
+      <div className="col-12">
+        <div 
+          className="alert alert-info d-flex align-items-center"
+          style={{ 
+            backgroundColor: 'rgba(13, 202, 240, 0.1)',
+            border: '1px solid rgba(13, 202, 240, 0.2)',
+            borderRadius: '8px',
+            color: '#0d6efd'
+          }}
+        >
+          <div className="d-flex align-items-center">
+            <i className="fas fa-globe-americas fa-lg me-3" style={{ color: '#0d6efd' }}></i>
+            <div>
+              <h6 className="alert-heading mb-1" style={{ color: '#0d6efd' }}>
+                <strong>Multi-Region Data</strong>
+              </h6>
+              <p className="mb-0" style={{ color: '#0d6efd' }}>
+                <small>
+                  Work arrangement data is aggregated from job postings across <strong>United States</strong> and <strong>Canada</strong> markets. 
+                  This provides comprehensive insights into remote vs on-site opportunities across North American tech industry.
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Summary Stats */}
       <div className="col-12">
         <div className="row g-3">
@@ -57,33 +85,6 @@ export const RemoteVsOnsite: React.FC = () => {
               icon="fas fa-building"
               colorClass="info"
             />
-          </div>
-        </div>
-      </div>
-
-      {/* Multi-Region Data Notice */}
-      <div className="col-12">
-        <div 
-          className="alert d-flex align-items-center"
-          style={{ 
-            backgroundColor: 'var(--info-bg)',
-            border: '1px solid var(--info-border)',
-            borderRadius: '8px'
-          }}
-        >
-          <div className="d-flex align-items-center">
-            <i className="fas fa-globe-americas fa-lg me-3" style={{ color: 'var(--bs-info)' }}></i>
-            <div>
-              <h6 className="alert-heading mb-1" style={{ color: 'var(--bs-info)' }}>
-                <strong>Multi-Region Data</strong>
-              </h6>
-              <p className="mb-0">
-                <small>
-                  Work arrangement data is aggregated from job postings across <strong>United States</strong> and <strong>Canada</strong> markets. 
-                  This provides comprehensive insights into remote vs on-site opportunities across North American tech industry.
-                </small>
-              </p>
-            </div>
           </div>
         </div>
       </div>
