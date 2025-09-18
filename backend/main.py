@@ -15,7 +15,8 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://job-m-tracker.onrender.com"
 ]
 
 app.add_middleware(
@@ -31,6 +32,11 @@ app.add_middleware(
 @app.get('/')
 def main():
     return {"name" : "Viktor Blais"}
+
+
+@app.get('/health')
+def health_check():
+    return {"status": "healthy", "message": "API is running"}
 
 
 # ACTUAL API ROUTE FOR PROJECT
