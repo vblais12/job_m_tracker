@@ -9,8 +9,8 @@ import json
 load_dotenv()
 
 # DB CRED
-HOST = os.getenv("HOST")
-PORT = os.getenv("PORT")
+HOST = os.getenv("DB_HOST") or os.getenv("HOST")
+PORT = os.getenv("DB_PORT") or os.getenv("PORT", "5432")
 DBNAME = os.getenv("DBNAME")
 USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
