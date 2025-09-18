@@ -19,6 +19,8 @@ origins = [
     "https://job-m-tracker.onrender.com",
     "https://job-m-tracker.vercel.app",
     "https://*.vercel.app"  # Allow all Vercel preview deployments
+    "job-market-tracker.com",
+    "www.job-market-tracker.com"
 ]
 
 app.add_middleware(
