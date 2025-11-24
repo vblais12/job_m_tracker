@@ -19,7 +19,7 @@ def process_jobs(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWO
 
     DB_migration(host, port, dbname, user, password)
 
-    # 2) Connect to DB
+    # Connect to DB
     conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
 
     with conn.cursor() as c:
@@ -39,16 +39,16 @@ def process_jobs(host=HOST, port=PORT, dbname=DBNAME, user=USER, password=PASSWO
         jobs = c.fetchall()
         print(f"Found {len(jobs)} job(s) to process.")
 
-        # 3) Build the NLP pipeline 
+        # build NLP pipeline 
         NLP = build_pipeline()
         
 
-        # 4) Process jobs
+        # process jobs
         for job_id, desc, qualifications, search_query in tqdm(jobs, desc="Extracting skills"):
             text = " ".join(filter(None, [desc, qualifications]))  # skip None, concatenates desc and qualifications into 1 string
             skills = extract_skills(NLP, text)  # List of tuples (skills, confidence)
 
-            # 5) Batch insert
+            # Batch insert
             c.executemany("""
                 INSERT INTO job_skills (job_id, skill, confidence, search_query, source_model)
                 VALUES (%s, %s, %s, %s, %s)
